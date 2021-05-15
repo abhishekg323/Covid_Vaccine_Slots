@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="refresh" content="3" >
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<div id="Result"></div>
+	<script>
+		var pin='110006';
+		var dt='16-05-2021';
+		var str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
+		console.log(str);
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var myObj = JSON.parse(this.responseText);
+				var res= document.getElementById("Result");
+				if(myObj.sessions.length==0){
+					res.innerHTML= "<h1>NO SLOTS <br>"+pin+"</h1>";
+				}
+				else{
+					res.innerHTML= "";
+					for(var i=0;i<myObj.sessions.length;i++){
+						if(myObj.sessions[i].min_age_limit==18){
+							res.innerHTML+="<div style='background-color:red; width:80px; margin:auto;'><center><h1>18</h1></center></div>";
+						}
+						else{
+							res.innerHTML= "<h1>NO 18+ SLOTS <br>"+pin+"</h1>";
+							continue;
+						}
+						res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
+						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity + " Doses Left </h2>";
+						res.innerHTML+=myObj.sessions[i].name + " <br>";
+						res.innerHTML+=myObj.sessions[i].address + " <br>";
+						res.innerHTML+="<h3>"+myObj.sessions[i].pincode + " Pincode </h3><hr>";
+					}
+				}
+			}
+		};
+		xmlhttp.open("GET", str, true);
+		xmlhttp.send();   		
+	</script>
+	</body>
+</html>
