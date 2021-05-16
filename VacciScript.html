@@ -7,7 +7,7 @@
 	<body>
 		<div id="Result"></div>
 	<script>
-		var pin='110044';
+		var pin='110041';
 		var dt='17-05-2021';
 		var str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
 		console.log(str);
@@ -20,23 +20,21 @@
 					res.innerHTML= "<h1>NO SLOTS <br>"+pin+"</h1>";
 				}
 				else{
+				var chk=0;
 					res.innerHTML= "";
 					for(var i=0;i<myObj.sessions.length;i++){
 						if(myObj.sessions[i].min_age_limit==18){
+						chk++;
 							res.innerHTML+="<div style='background-color:red; width:80px; margin:auto;'><center><h1>18</h1></center></div>";
-						}
-						else if(i==myObj.sessions.length-1){
-							res.innerHTML= "<h1>NO 18+ SLOTS <br>"+pin+"</h1>";
-							continue;
-						}
-						else{
-							continue;
-						}
-						res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
+							res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
 						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity + " Doses Left </h2>";
 						res.innerHTML+=myObj.sessions[i].name + " <br>";
 						res.innerHTML+=myObj.sessions[i].address + " <br>";
 						res.innerHTML+="<h3>"+myObj.sessions[i].pincode + " Pincode </h3><hr>";
+						}
+					}
+					if(chk==0){
+						res.innerHTML+="<div><center><h1>No 18+ Slots </h1><h2>"+pin+"</h2></center></div>";
 					}
 				}
 			}
