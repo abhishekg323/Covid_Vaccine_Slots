@@ -7,8 +7,8 @@
 	<body>
 		<div id="Result"></div>
 	<script>
-		var pin='110006';	// Your PinCode
-		var dt='16-05-2021';	// Your Date
+		var pin='110044';
+		var dt='17-05-2021';
 		var str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
 		console.log(str);
 		var xmlhttp = new XMLHttpRequest();
@@ -25,8 +25,11 @@
 						if(myObj.sessions[i].min_age_limit==18){
 							res.innerHTML+="<div style='background-color:red; width:80px; margin:auto;'><center><h1>18</h1></center></div>";
 						}
-						else{
+						else if(i==myObj.sessions.length-1){
 							res.innerHTML= "<h1>NO 18+ SLOTS <br>"+pin+"</h1>";
+							continue;
+						}
+						else{
 							continue;
 						}
 						res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
