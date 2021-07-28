@@ -7,8 +7,8 @@
 	<body>
 		<div id="Result"></div>
 	<script>
-		var pin='110019';
-		var dt='18-05-2021';
+		var pin='110006';
+		var dt='29-07-2021';
 		var str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
 		console.log(str);
 		var xmlhttp = new XMLHttpRequest();
@@ -27,7 +27,10 @@
 						chk++;
 							res.innerHTML+="<div style='background-color:red; width:80px; margin:auto;'><center><h1>18</h1></center></div>";
 							res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
-						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity + " Doses Left </h2>";
+						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose1 + "&nbsp;<span style=\"background-color: cyan\"> Dose 1 </span>&nbsp;Doses Left </h2>";
+						
+						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose2 + "&nbsp;<span style=\"background-color: cyan\"> Dose 2 </span>&nbsp;Doses Left </h2>";
+						
 						res.innerHTML+=myObj.sessions[i].name + " <br>";
 						res.innerHTML+=myObj.sessions[i].address + " <br>";
 						res.innerHTML+="<h3>"+myObj.sessions[i].pincode + " Pincode </h3><hr>";
