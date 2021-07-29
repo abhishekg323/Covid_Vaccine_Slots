@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta http-equiv="refresh" content="3" >
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body{
+				margin:0;
+				padding:0;
+			}
+			@media(min-width:768px){
+				.parent{
+					padding-left: 5px;
+					box-sizing: border-box;
+					width:50%;
+					display:inline-block;
+					border-right: 1px solid black;
+				}
+			}
+			@media(min-width:1000px){
+				.parent{
+					padding-left: 5px;
+					box-sizing: border-box;
+					width:25%;
+					display:inline-block;
+					border-right: 1px solid black;
+				}
+			
+			}
+		</style>
 	</head>
 	<body>
 		<div id="Result"></div>
 	<script>
-		var pin='110006';
+	/********************* Change below as per need ******************************/
+		var pin='110041';
 		var dt='29-07-2021';
+		var reloadTime_in_sec = 3;
+	/********************* Change above as per need ******************************/	
+		
 		var str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
 		console.log(str);
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
+				console.log("Respose Recieved");
 				var myObj = JSON.parse(this.responseText);
 				var res= document.getElementById("Result");
 				if(myObj.sessions.length==0){
@@ -21,26 +50,39 @@
 				}
 				else{
 				var chk=0;
-					res.innerHTML= "";
+					var parent=res;
+					parent.innerHTML= "";
+					
 					for(var i=0;i<myObj.sessions.length;i++){
 						if(myObj.sessions[i].min_age_limit==18){
-						chk++;
+							chk++;
+							res=document.createElement("section");
+							res.classList.add("parent");
+							parent.appendChild(res);
+							
 							res.innerHTML+="<div style='background-color:red; width:80px; margin:auto;'><center><h1>18</h1></center></div>";
 							res.innerHTML+="<h3>"+myObj.sessions[i].min_age_limit + " Age </h3>";
-						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose1 + "&nbsp;<span style=\"background-color: cyan\"> Dose 1 </span>&nbsp;Doses Left </h2>";
+							res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose1 + "&nbsp;<span style=\"background-color: cyan\"> Dose 1 </span>&nbsp;Doses Left </h2>";
 						
-						res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose2 + "&nbsp;<span style=\"background-color: cyan\"> Dose 2 </span>&nbsp;Doses Left </h2>";
+							res.innerHTML+="<h2>"+myObj.sessions[i].available_capacity_dose2 + "&nbsp;<span style=\"background-color: cyan\"> Dose 2 </span>&nbsp;Doses Left </h2>";
 						
-						res.innerHTML+=myObj.sessions[i].name + " <br>";
-						res.innerHTML+=myObj.sessions[i].address + " <br>";
-						res.innerHTML+="<h3>"+myObj.sessions[i].pincode + " Pincode </h3><hr>";
+							if(myObj.sessions[i].fee_type=="Free")
+								res.innerHTML+="<h2 style=\"background-color: #55ff4f; width: 100px; text-align:center; display: inline-block;\">"+myObj.sessions[i].fee_type + " </h2>";
+							else
+								res.innerHTML+="<h2 style=\"background-color: #fc2323; width: 100px; text-align:center; display: inline-block;\">"+myObj.sessions[i].fee_type + " </h2>";
+							res.innerHTML+="<h2 style=\"display:inline; margin-left: 10px;\">"+myObj.sessions[i].vaccine + " </h2><br>";
+							res.innerHTML+=myObj.sessions[i].name + " <br>";
+							res.innerHTML+=myObj.sessions[i].address + " <br>";
+							res.innerHTML+="<h3>"+myObj.sessions[i].pincode + " Pincode </h3><hr>";
 						}
 					}
 					if(chk==0){
 						res.innerHTML+="<div><center><h1>No 18+ Slots </h1><h2>"+pin+"</h2></center></div>";
 					}
 				}
+				setTimeout(()=>{location.reload();},1000*reloadTime_in_sec);
 			}
+			
 		};
 		xmlhttp.open("GET", str, true);
 		xmlhttp.send();   		
