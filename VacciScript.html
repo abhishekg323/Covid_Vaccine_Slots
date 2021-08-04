@@ -31,14 +31,16 @@
 	<body>
 	<center>
 		Enter PinCode : <input type="number" id="pin" placeholder="110006"><br>
-		Enter Date : <input type="date" id="dt" placeholder="DD-MM-YYYY"><br>
+		Enter Date : <input type="text" id="dt" placeholder="DD-MM-YYYY"><br>
 		<button id="btn">Start</button>
 		<hr size="3">
 	</center>
 		<div id="Result"></div>
 	<script>
 		let reloadTime_in_sec = 3,myObj,str,pin,dt,num=0,avail = new Audio('available.mp3'),free=new Audio("free.mp3");
-		
+		let tmp=new Date().toJSON().slice(0,10).split("-");
+		tmp=`${tmp[2]}-${tmp[1]}-${tmp[0]}`;
+		document.getElementById("dt").value=tmp;
 		let myFun = ()=>{
 			document.body.children[0].innerHTML="<h2>No. of Times Record fetched : "+ ++num+"</h2><hr>";
 			console.log(str,"\nRespose Recieved");
@@ -87,8 +89,7 @@
 		document.getElementById("btn").addEventListener("click",()=>{
 			btn.disabled=true;
 			pin=document.getElementById("pin").value;
-			dt=document.getElementById("dt").value.split("-");
-			dt=`${dt[2]}-${dt[1]}-${dt[0]}`;
+			dt=document.getElementById("dt").value;
 			str= 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode='+pin+'&date='+dt;
 			fetch(str).then((r)=>r.json()).then((obj)=>{myObj=obj; myFun();});
 		});
